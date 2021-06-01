@@ -13,7 +13,7 @@ workflows:
       # The COMMENT_ARGS here allows a comment of `atlantis plan -- -destroy`
       # in order to destroy a particular config.
       # https://github.com/runatlantis/atlantis/pull/1565
-      - run: terragrunt plan -no-color $(eval echo ${COMMENT_ARGS}) -out=${PLANFILE}
+      - run: terragrunt plan -no-color --terragrunt-non-interactive $(eval echo ${COMMENT_ARGS}) -out=${PLANFILE}
     apply:
       steps:
       - env:

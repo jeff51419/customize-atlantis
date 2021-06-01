@@ -18,7 +18,7 @@ workflows:
       # because we generally discourage using plan-all especially with plan files due to the issues surrounding dependencies
       # https://github.com/gruntwork-io/terragrunt/issues/1543
       # https://terragrunt.gruntwork.io/docs/reference/cli-options/#plan-all-deprecated-use-run-all
-      - run: terragrunt run-all plan -no-color $(eval echo ${COMMENT_ARGS})
+      - run: terragrunt run-all plan -no-color --terragrunt-non-interactive $(eval echo ${COMMENT_ARGS})
     apply:
       steps:
       - env:
