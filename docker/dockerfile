@@ -1,0 +1,15 @@
+FROM runatlantis/atlantis:latest
+
+# fix the severity vulnerability
+RUN apk upgrade
+
+RUN wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.29.3/terragrunt_linux_amd64 -O terragrunt 
+
+# rwxr-xr-x terragrunt
+RUN chmod 755 terragrunt
+
+# copy a terraform binary of the version you need
+RUN mv terragrunt /usr/local/bin/terragrunt
+
+COPY repos.yaml /opt/repos.yaml
+COPY repos-destroy-func.yaml /opt/repos-destroy-func.yaml

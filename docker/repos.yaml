@@ -1,0 +1,28 @@
+# repos.yaml
+# Specify TERRAGRUNT_TFPATH environment variable to accomodate setting --default-tf-version
+repos:
+- id: "/.*/"
+  workflow: terragrunt
+workflows:
+  terragrunt:
+    plan:
+      steps:
+      - env:
+          name: TERRAGRUNT_TFPATH
+          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+      # The COMMENT_ARGS here allows a comment of `atlantis plan -- -destroy`
+      # in order to destroy a particular config.
+      # https://github.com/runatlantis/atlantis/pull/1565
+      # - run: terragrunt plan -no-color $(eval echo ${COMMENT_ARGS}) -out=${PLANFILE}
+      # Cannot run-all apply with plan file 
+      # because we generally discourage using plan-all especially with plan files due to the issues surrounding dependencies
+      # https://github.com/gruntwork-io/terragrunt/issues/1543
+      # https://terragrunt.gruntwork.io/docs/reference/cli-options/#plan-all-deprecated-use-run-all
+      - run: terragrunt run-all plan -no-color $(eval echo ${COMMENT_ARGS})
+    apply:
+      steps:
+      - env:
+          name: TERRAGRUNT_TFPATH
+          command: 'echo "terraform${ATLANTIS_TERRAFORM_VERSION}"'
+      # - run: terragrunt apply -no-color $PLANFILE
+      - run: terragrunt run-all apply -no-color --terragrunt-non-interactive --terragrunt-source-update -auto-approve
